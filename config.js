@@ -60,6 +60,8 @@ const CONFIG = {
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/WhatsApp_Image_2026-01-23_at_2.24.22_AM_e27kt1.jpg",
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/IMG-20260111-WA0022_b4urip.jpg",
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/IMG-20260111-WA0020_tlod4c.jpg",
+            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/IMG-20260104-WA0073_zunqru.jpg"
+            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/WhatsApp_Image_2026-01-15_at_12.15.21_PM_ilqrkc.jpg"
         ]
     },
 
