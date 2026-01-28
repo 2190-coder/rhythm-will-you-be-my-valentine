@@ -240,3 +240,34 @@ function setupMusicPlayer() {
         }
     });
 } 
+
+// ==========================================
+// 📸 CUSTOM SLIDESHOW CODE
+// ==========================================
+// This checks if you have a 'photos' list in your config
+// and rotates through them every 2.5 seconds.
+document.addEventListener('click', function(e) {
+    // Check if the "Yes" button was clicked (triggers celebration)
+    if (e.target.innerText === CONFIG.questions.third.yesBtn) {
+        
+        // Only run if we have multiple photos defined
+        if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) {
+            
+            // Wait a moment for the animation to start
+            setTimeout(() => {
+                // Find the celebration image element
+                const imgElement = document.querySelector('#celebration img') || document.querySelector('.celebration-container img');
+                
+                if (imgElement) {
+                    let currentIndex = 0;
+                    
+                    // Start the timer to change images
+                    setInterval(() => {
+                        currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
+                        imgElement.src = CONFIG.celebration.photos[currentIndex];
+                    }, 2500); // Change every 2500ms (2.5 seconds)
+                }
+            }, 1000);
+        }
+    }
+});
