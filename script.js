@@ -297,4 +297,31 @@ document.addEventListener('click', function(e) {
                     overlay.style.display = 'flex';
                     overlay.style.justifyContent = 'center';
                     overlay.style.alignItems = 'center';
-                    overlay.style.flexDirection =
+                    overlay.style.flexDirection = 'column';
+                    
+                    // B. Move the image into this clean overlay
+                    overlay.appendChild(img);
+                    document.body.appendChild(overlay);
+
+                    // C. Style the Image for the Slideshow
+                    img.style.width = "90%";
+                    img.style.maxWidth = "600px"; // Max width for desktop
+                    img.style.height = "auto";
+                    img.style.marginTop = "0";
+                    img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5)"; // Nice cinematic shadow
+                    img.style.border = "5px solid white"; // Optional: Polaroid look
+
+                    // D. Start the Loop
+                    if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
+                        let currentIndex = 0;
+                        setInterval(() => {
+                            currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
+                            img.src = CONFIG.celebration.photos[currentIndex];
+                        }, 2500); // Change photo every 2.5 seconds
+                    }
+
+                }, 4000); // Wait 4 seconds before switching to clean mode
+            }
+        }, 500);
+    }
+});
