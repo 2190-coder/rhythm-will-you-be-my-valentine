@@ -242,19 +242,19 @@ function setupMusicPlayer() {
 } 
 
 // ==========================================
-// 📸 CINEMATIC SLIDESHOW CODE (FIXED)
+// 📸 FINAL CLEAN SLIDESHOW CODE
 // ==========================================
 document.addEventListener('click', function(e) {
     // Check if the clicked button is the "Yes" button
     if (e.target.innerText === CONFIG.questions.third.yesBtn) {
         
-        console.log("Yes button clicked! Preparing cinematic slideshow...");
+        console.log("Yes clicked! Starting sequence...");
 
-        // 1. Insert the Image Immediately (Small at first)
+        // 1. PHASE ONE: Show Image with Text (Initial Celebration)
         setTimeout(() => {
             const celebrationContainer = document.getElementById('celebration');
             if (celebrationContainer) {
-                // Create image element
+                // Create the image element
                 const img = document.createElement('img');
                 const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
                     ? CONFIG.celebration.photos[0] 
@@ -262,11 +262,13 @@ document.addEventListener('click', function(e) {
 
                 img.src = firstImage;
                 img.id = 'valentine-photo';
-                img.style.width = "200px";     // Start small (fits with text)
+                
+                // Style for Phase 1 (Inline with text)
+                img.style.width = "200px";
                 img.style.borderRadius = "15px";
                 img.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)";
                 img.style.marginTop = "20px";
-                img.style.transition = "all 1s ease"; // Smooth transition for resizing
+                img.style.transition = "transform 0.5s ease";
 
                 // Add to page
                 const messageElement = celebrationContainer.querySelector('.message');
@@ -276,44 +278,23 @@ document.addEventListener('click', function(e) {
                     celebrationContainer.appendChild(img);
                 }
 
-                // 2. START THE "CINEMATIC" TRANSITION (After 4 Seconds)
+                // 2. PHASE TWO: The Clean Slideshow (After 4 Seconds)
                 setTimeout(() => {
-                    // A. Hide all text elements
-                    const title = document.querySelector('.celebration-container .title') || document.querySelector('h1');
-                    const message = document.querySelector('.celebration-container .message') || document.querySelector('p');
-                    const buttons = document.querySelector('.buttons'); // Hide any leftover buttons
-
-                    if(title) title.style.display = 'none';
-                    if(message) message.style.display = 'none';
-                    if(buttons) buttons.style.display = 'none';
-
-                    // B. Hide the Background Emojis (Canvas)
-                    const canvas = document.getElementById('canvas');
-                    if (canvas) canvas.style.opacity = '0'; // Fades out the floating hearts
-
-                    // C. Make the Image Big and Centered
-                    img.style.width = "90%";       // Make it big
-                    img.style.maxWidth = "600px";  // But not too big on desktop
-                    img.style.height = "auto";
-                    img.style.position = "fixed";  // Center it on screen
-                    img.style.top = "50%";
-                    img.style.left = "50%";
-                    img.style.marginTop = "0";
-                    img.style.transform = "translate(-50%, -50%)"; // Perfect center
-                    img.style.zIndex = "9999";     // Put it on top of everything
-                    img.style.boxShadow = "0 10px 50px rgba(0,0,0,0.5)"; // Big cinematic shadow
-
-                    // D. Start the Loop
-                    if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
-                        let currentIndex = 0;
-                        setInterval(() => {
-                            currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
-                            img.src = CONFIG.celebration.photos[currentIndex];
-                        }, 2500);
-                    }
-
-                }, 4000); // <--- Wait 4000ms (4 seconds) before clearing text
-            }
-        }, 500);
-    }
-});
+                    // A. Create a full-screen overlay to cover EVERYTHING
+                    const overlay = document.createElement('div');
+                    overlay.id = 'slideshow-overlay';
+                    
+                    // Style the overlay to be a clean background
+                    // We use the same colors from your config so it looks consistent
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100vw';
+                    overlay.style.height = '100vh';
+                    overlay.style.backgroundColor = CONFIG.colors.backgroundStart; // Solid color to hide back elements
+                    overlay.style.background = `linear-gradient(135deg, ${CONFIG.colors.backgroundStart}, ${CONFIG.colors.backgroundEnd})`;
+                    overlay.style.zIndex = '999999'; // Super high level to sit on top of everything
+                    overlay.style.display = 'flex';
+                    overlay.style.justifyContent = 'center';
+                    overlay.style.alignItems = 'center';
+                    overlay.style.flexDirection =
