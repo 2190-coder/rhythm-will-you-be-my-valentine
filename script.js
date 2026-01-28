@@ -242,16 +242,13 @@ function setupMusicPlayer() {
 } 
 
 // ==========================================
-// 📸 HIDDEN SLIDESHOW CODE
+// 📸 FINAL FIXED SLIDESHOW CODE
 // ==========================================
 document.addEventListener('click', function(e) {
     // Check if the clicked button is the "Yes" button
     if (e.target.innerText === CONFIG.questions.third.yesBtn) {
         
         console.log("Yes clicked! Waiting 4 seconds before showing photos...");
-
-        // NOTE: We do NOT show the image immediately. 
-        // We let the user read the text and see the emojis first.
 
         // After 4 seconds, we switch to the clean slideshow overlay
         setTimeout(() => {
@@ -260,56 +257,65 @@ document.addEventListener('click', function(e) {
             const overlay = document.createElement('div');
             overlay.id = 'slideshow-overlay';
             
-            // Style the overlay to cover the whole screen
+            // Style the overlay
             overlay.style.position = 'fixed';
             overlay.style.top = '0';
             overlay.style.left = '0';
             overlay.style.width = '100vw';
             overlay.style.height = '100vh';
-            // Use your config colors for the background
             overlay.style.backgroundColor = CONFIG.colors.backgroundStart; 
             overlay.style.background = `linear-gradient(135deg, ${CONFIG.colors.backgroundStart}, ${CONFIG.colors.backgroundEnd})`;
-            overlay.style.zIndex = '999999'; // On top of everything
+            overlay.style.zIndex = '999999';
             overlay.style.display = 'flex';
             overlay.style.justifyContent = 'center';
             overlay.style.alignItems = 'center';
             overlay.style.flexDirection = 'column';
-            overlay.style.opacity = '0'; // Start invisible for a smooth fade-in
-            overlay.style.transition = 'opacity 1s ease'; // 1-second fade effect
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 1s ease';
 
-            // 2. Create the Image Element
+            // 2. Prepare the List of Photos
+            // We combine your main 'image' and your 'photos' list into one big list
+            let allPhotos = [];
+            
+            // Add the main image first (The one you really want to see!)
+            if (CONFIG.celebration.image) {
+                allPhotos.push(CONFIG.celebration.image);
+            }
+            // Add the rest of the photos
+            if (CONFIG.celebration.photos) {
+                allPhotos = allPhotos.concat(CONFIG.celebration.photos);
+            }
+
+            // 3. Create the Image Element
             const img = document.createElement('img');
-            const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
-                ? CONFIG.celebration.photos[0] 
-                : CONFIG.celebration.image;
-
-            img.src = firstImage;
+            // Start with the VERY FIRST photo in our new combined list
+            img.src = allPhotos[0]; 
+            
             img.style.width = "90%";
-            img.style.maxWidth = "600px"; // Keeps it looking good on desktop
+            img.style.maxWidth = "600px";
             img.style.height = "auto";
             img.style.borderRadius = "15px";
-            img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5)"; // Cinematic shadow
-            img.style.border = "5px solid white"; // Optional: Looks like a photo frame
+            img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5)";
+            img.style.border = "5px solid white";
 
-            // 3. Put the image inside the overlay, and the overlay on the page
+            // 4. Put the image inside the overlay
             overlay.appendChild(img);
             document.body.appendChild(overlay);
 
-            // 4. Fade it in
-            // Small timeout to allow the browser to render the div before fading opacity
+            // 5. Fade it in
             setTimeout(() => {
                 overlay.style.opacity = '1';
             }, 50);
 
-            // 5. Start the Slideshow Loop
-            if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
+            // 6. Start the Slideshow Loop
+            if (allPhotos.length > 1) {
                 let currentIndex = 0;
                 setInterval(() => {
-                    currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
-                    img.src = CONFIG.celebration.photos[currentIndex];
+                    currentIndex = (currentIndex + 1) % allPhotos.length;
+                    img.src = allPhotos[currentIndex];
                 }, 2500); // Change photo every 2.5 seconds
             }
 
-        }, 4000); // <--- THIS is the delay (4 seconds). Text shows for 4s, then photos start.
+        }, 4000); // 4 Second Delay for text reading
     }
 });
