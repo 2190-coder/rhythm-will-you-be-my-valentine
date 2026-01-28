@@ -242,43 +242,33 @@ function setupMusicPlayer() {
 } 
 
 // ==========================================
-// 📸 FIXED IMAGE & SLIDESHOW CODE
+// 📸 CINEMATIC SLIDESHOW CODE (FIXED)
 // ==========================================
 document.addEventListener('click', function(e) {
     // Check if the clicked button is the "Yes" button
-    // We check against the text defined in your config
     if (e.target.innerText === CONFIG.questions.third.yesBtn) {
         
-        console.log("Yes button clicked! Starting image sequence...");
+        console.log("Yes button clicked! Preparing cinematic slideshow...");
 
-        // Wait 300ms for the original animation to clear the screen
+        // 1. Insert the Image Immediately (Small at first)
         setTimeout(() => {
-            // 1. Find the celebration container
             const celebrationContainer = document.getElementById('celebration');
-            
             if (celebrationContainer) {
-                // 2. Create the image element from scratch
+                // Create image element
                 const img = document.createElement('img');
-                
-                // Set the initial source (either the single image or the first one in the list)
                 const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
                     ? CONFIG.celebration.photos[0] 
                     : CONFIG.celebration.image;
 
                 img.src = firstImage;
                 img.id = 'valentine-photo';
-                img.alt = "Us ❤️";
-
-                // 3. Add styling to make it look nice
-                img.style.maxWidth = "300px"; // Keeps it from being too huge
-                img.style.width = "80%";
-                img.style.borderRadius = "15px"; // Rounded corners
-                img.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)"; // Soft shadow
+                img.style.width = "200px";     // Start small (fits with text)
+                img.style.borderRadius = "15px";
+                img.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)";
                 img.style.marginTop = "20px";
-                img.style.transition = "transform 0.3s ease"; // Smooth animation
+                img.style.transition = "all 1s ease"; // Smooth transition for resizing
 
-                // 4. Insert the image into the page
-                // We insert it before the message text if possible, or just append it
+                // Add to page
                 const messageElement = celebrationContainer.querySelector('.message');
                 if (messageElement) {
                     celebrationContainer.insertBefore(img, messageElement.nextSibling);
@@ -286,15 +276,44 @@ document.addEventListener('click', function(e) {
                     celebrationContainer.appendChild(img);
                 }
 
-                // 5. Start the Slideshow (if photos exist)
-                if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
-                    let currentIndex = 0;
-                    setInterval(() => {
-                        currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
-                        img.src = CONFIG.celebration.photos[currentIndex];
-                    }, 2500); // Change photo every 2.5 seconds
-                }
+                // 2. START THE "CINEMATIC" TRANSITION (After 4 Seconds)
+                setTimeout(() => {
+                    // A. Hide all text elements
+                    const title = document.querySelector('.celebration-container .title') || document.querySelector('h1');
+                    const message = document.querySelector('.celebration-container .message') || document.querySelector('p');
+                    const buttons = document.querySelector('.buttons'); // Hide any leftover buttons
+
+                    if(title) title.style.display = 'none';
+                    if(message) message.style.display = 'none';
+                    if(buttons) buttons.style.display = 'none';
+
+                    // B. Hide the Background Emojis (Canvas)
+                    const canvas = document.getElementById('canvas');
+                    if (canvas) canvas.style.opacity = '0'; // Fades out the floating hearts
+
+                    // C. Make the Image Big and Centered
+                    img.style.width = "90%";       // Make it big
+                    img.style.maxWidth = "600px";  // But not too big on desktop
+                    img.style.height = "auto";
+                    img.style.position = "fixed";  // Center it on screen
+                    img.style.top = "50%";
+                    img.style.left = "50%";
+                    img.style.marginTop = "0";
+                    img.style.transform = "translate(-50%, -50%)"; // Perfect center
+                    img.style.zIndex = "9999";     // Put it on top of everything
+                    img.style.boxShadow = "0 10px 50px rgba(0,0,0,0.5)"; // Big cinematic shadow
+
+                    // D. Start the Loop
+                    if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
+                        let currentIndex = 0;
+                        setInterval(() => {
+                            currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
+                            img.src = CONFIG.celebration.photos[currentIndex];
+                        }, 2500);
+                    }
+
+                }, 4000); // <--- Wait 4000ms (4 seconds) before clearing text
             }
-        }, 500); // Short delay to ensure the celebration div is visible
+        }, 500);
     }
 });
