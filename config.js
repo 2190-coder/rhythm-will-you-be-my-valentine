@@ -60,19 +60,19 @@ const CONFIG = {
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/WhatsApp_Image_2026-01-23_at_2.24.22_AM_e27kt1.jpg",
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/IMG-20260111-WA0022_b4urip.jpg",
             "https://res.cloudinary.com/daubq6pnz/image/upload/v1769569338/IMG-20260111-WA0020_tlod4c.jpg",
-            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/IMG-20260104-WA0073_zunqru.jpg"
-            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/WhatsApp_Image_2026-01-15_at_12.15.21_PM_ilqrkc.jpg"
+            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/IMG-20260104-WA0073_zunqru.jpg",
+            "https://res.cloudinary.com/daubq6pnz/image/upload/v1769571191/WhatsApp_Image_2026-01-15_at_12.15.21_PM_ilqrkc.jpg",
         ]
     },
 
     // Color scheme for the website
     // Use https://colorhunt.co or https://coolors.co to find beautiful color combinations
     colors: {
-        backgroundStart: "#ffafbd",      // Gradient start (try pastel colors for a soft look)
-        backgroundEnd: "#ffc3a0",        // Gradient end (should complement backgroundStart)
-        buttonBackground: "#ff6b6b",     // Button color (should stand out against the background)
-        buttonHover: "#ff8787",          // Button hover color (slightly lighter than buttonBackground)
-        textColor: "#ff4757"             // Text color (make sure it's readable!)
+        backgroundStart: "#ff9a9e",    // A softer, warmer pink
+        backgroundEnd: "#fecfef",      // Fades into a very light pink
+        buttonBackground: "#ff6b6b",
+        buttonHover: "#ff8787",
+        textColor: "#ff4757"
     },
 
     // Animation settings
