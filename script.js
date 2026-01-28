@@ -242,32 +242,59 @@ function setupMusicPlayer() {
 } 
 
 // ==========================================
-// 📸 CUSTOM SLIDESHOW CODE
+// 📸 FIXED IMAGE & SLIDESHOW CODE
 // ==========================================
-// This checks if you have a 'photos' list in your config
-// and rotates through them every 2.5 seconds.
 document.addEventListener('click', function(e) {
-    // Check if the "Yes" button was clicked (triggers celebration)
+    // Check if the clicked button is the "Yes" button
+    // We check against the text defined in your config
     if (e.target.innerText === CONFIG.questions.third.yesBtn) {
         
-        // Only run if we have multiple photos defined
-        if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) {
+        console.log("Yes button clicked! Starting image sequence...");
+
+        // Wait 300ms for the original animation to clear the screen
+        setTimeout(() => {
+            // 1. Find the celebration container
+            const celebrationContainer = document.getElementById('celebration');
             
-            // Wait a moment for the animation to start
-            setTimeout(() => {
-                // Find the celebration image element
-                const imgElement = document.querySelector('#celebration img') || document.querySelector('.celebration-container img');
+            if (celebrationContainer) {
+                // 2. Create the image element from scratch
+                const img = document.createElement('img');
                 
-                if (imgElement) {
+                // Set the initial source (either the single image or the first one in the list)
+                const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
+                    ? CONFIG.celebration.photos[0] 
+                    : CONFIG.celebration.image;
+
+                img.src = firstImage;
+                img.id = 'valentine-photo';
+                img.alt = "Us ❤️";
+
+                // 3. Add styling to make it look nice
+                img.style.maxWidth = "300px"; // Keeps it from being too huge
+                img.style.width = "80%";
+                img.style.borderRadius = "15px"; // Rounded corners
+                img.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)"; // Soft shadow
+                img.style.marginTop = "20px";
+                img.style.transition = "transform 0.3s ease"; // Smooth animation
+
+                // 4. Insert the image into the page
+                // We insert it before the message text if possible, or just append it
+                const messageElement = celebrationContainer.querySelector('.message');
+                if (messageElement) {
+                    celebrationContainer.insertBefore(img, messageElement.nextSibling);
+                } else {
+                    celebrationContainer.appendChild(img);
+                }
+
+                // 5. Start the Slideshow (if photos exist)
+                if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
                     let currentIndex = 0;
-                    
-                    // Start the timer to change images
                     setInterval(() => {
                         currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
-                        imgElement.src = CONFIG.celebration.photos[currentIndex];
-                    }, 2500); // Change every 2500ms (2.5 seconds)
+                        img.src = CONFIG.celebration.photos[currentIndex];
+                    }, 2500); // Change photo every 2.5 seconds
                 }
-            }, 1000);
-        }
+            }
+        }, 500); // Short delay to ensure the celebration div is visible
     }
 });
