@@ -242,86 +242,74 @@ function setupMusicPlayer() {
 } 
 
 // ==========================================
-// 📸 FINAL CLEAN SLIDESHOW CODE
+// 📸 HIDDEN SLIDESHOW CODE
 // ==========================================
 document.addEventListener('click', function(e) {
     // Check if the clicked button is the "Yes" button
     if (e.target.innerText === CONFIG.questions.third.yesBtn) {
         
-        console.log("Yes clicked! Starting sequence...");
+        console.log("Yes clicked! Waiting 4 seconds before showing photos...");
 
-        // 1. PHASE ONE: Show Image with Text (Initial Celebration)
+        // NOTE: We do NOT show the image immediately. 
+        // We let the user read the text and see the emojis first.
+
+        // After 4 seconds, we switch to the clean slideshow overlay
         setTimeout(() => {
-            const celebrationContainer = document.getElementById('celebration');
-            if (celebrationContainer) {
-                // Create the image element
-                const img = document.createElement('img');
-                const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
-                    ? CONFIG.celebration.photos[0] 
-                    : CONFIG.celebration.image;
+            
+            // 1. Create the full-screen overlay (The "Curtain")
+            const overlay = document.createElement('div');
+            overlay.id = 'slideshow-overlay';
+            
+            // Style the overlay to cover the whole screen
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            // Use your config colors for the background
+            overlay.style.backgroundColor = CONFIG.colors.backgroundStart; 
+            overlay.style.background = `linear-gradient(135deg, ${CONFIG.colors.backgroundStart}, ${CONFIG.colors.backgroundEnd})`;
+            overlay.style.zIndex = '999999'; // On top of everything
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.flexDirection = 'column';
+            overlay.style.opacity = '0'; // Start invisible for a smooth fade-in
+            overlay.style.transition = 'opacity 1s ease'; // 1-second fade effect
 
-                img.src = firstImage;
-                img.id = 'valentine-photo';
-                
-                // Style for Phase 1 (Inline with text)
-                img.style.width = "200px";
-                img.style.borderRadius = "15px";
-                img.style.boxShadow = "0 4px 15px rgba(0,0,0,0.2)";
-                img.style.marginTop = "20px";
-                img.style.transition = "transform 0.5s ease";
+            // 2. Create the Image Element
+            const img = document.createElement('img');
+            const firstImage = (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 0) 
+                ? CONFIG.celebration.photos[0] 
+                : CONFIG.celebration.image;
 
-                // Add to page
-                const messageElement = celebrationContainer.querySelector('.message');
-                if (messageElement) {
-                    celebrationContainer.insertBefore(img, messageElement.nextSibling);
-                } else {
-                    celebrationContainer.appendChild(img);
-                }
+            img.src = firstImage;
+            img.style.width = "90%";
+            img.style.maxWidth = "600px"; // Keeps it looking good on desktop
+            img.style.height = "auto";
+            img.style.borderRadius = "15px";
+            img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5)"; // Cinematic shadow
+            img.style.border = "5px solid white"; // Optional: Looks like a photo frame
 
-                // 2. PHASE TWO: The Clean Slideshow (After 4 Seconds)
-                setTimeout(() => {
-                    // A. Create a full-screen overlay to cover EVERYTHING
-                    const overlay = document.createElement('div');
-                    overlay.id = 'slideshow-overlay';
-                    
-                    // Style the overlay to be a clean background
-                    // We use the same colors from your config so it looks consistent
-                    overlay.style.position = 'fixed';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100vw';
-                    overlay.style.height = '100vh';
-                    overlay.style.backgroundColor = CONFIG.colors.backgroundStart; // Solid color to hide back elements
-                    overlay.style.background = `linear-gradient(135deg, ${CONFIG.colors.backgroundStart}, ${CONFIG.colors.backgroundEnd})`;
-                    overlay.style.zIndex = '999999'; // Super high level to sit on top of everything
-                    overlay.style.display = 'flex';
-                    overlay.style.justifyContent = 'center';
-                    overlay.style.alignItems = 'center';
-                    overlay.style.flexDirection = 'column';
-                    
-                    // B. Move the image into this clean overlay
-                    overlay.appendChild(img);
-                    document.body.appendChild(overlay);
+            // 3. Put the image inside the overlay, and the overlay on the page
+            overlay.appendChild(img);
+            document.body.appendChild(overlay);
 
-                    // C. Style the Image for the Slideshow
-                    img.style.width = "90%";
-                    img.style.maxWidth = "600px"; // Max width for desktop
-                    img.style.height = "auto";
-                    img.style.marginTop = "0";
-                    img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5)"; // Nice cinematic shadow
-                    img.style.border = "5px solid white"; // Optional: Polaroid look
+            // 4. Fade it in
+            // Small timeout to allow the browser to render the div before fading opacity
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+            }, 50);
 
-                    // D. Start the Loop
-                    if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
-                        let currentIndex = 0;
-                        setInterval(() => {
-                            currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
-                            img.src = CONFIG.celebration.photos[currentIndex];
-                        }, 2500); // Change photo every 2.5 seconds
-                    }
-
-                }, 4000); // Wait 4 seconds before switching to clean mode
+            // 5. Start the Slideshow Loop
+            if (CONFIG.celebration.photos && CONFIG.celebration.photos.length > 1) {
+                let currentIndex = 0;
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % CONFIG.celebration.photos.length;
+                    img.src = CONFIG.celebration.photos[currentIndex];
+                }, 2500); // Change photo every 2.5 seconds
             }
-        }, 500);
+
+        }, 4000); // <--- THIS is the delay (4 seconds). Text shows for 4s, then photos start.
     }
 });
