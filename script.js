@@ -319,3 +319,62 @@ document.addEventListener('click', function(e) {
         }, 4000); // 4 Second Delay for text reading
     }
 });
+
+// ==========================================
+// 🏃‍♂️ RUNAWAY "NO" BUTTON
+// ==========================================
+const noBtn = document.querySelector('.no-btn') || document.querySelectorAll('button')[1];
+
+if (noBtn) {
+    noBtn.addEventListener('mouseover', function() {
+        // Get the window width and height
+        const maxWidth = window.innerWidth - noBtn.offsetWidth;
+        const maxHeight = window.innerHeight - noBtn.offsetHeight;
+
+        // Calculate a random new position
+        const randomX = Math.floor(Math.random() * maxWidth);
+        const randomY = Math.floor(Math.random() * maxHeight);
+
+        // Apply the new position
+        noBtn.style.position = 'fixed'; // Make it float freely
+        noBtn.style.left = randomX + 'px';
+        noBtn.style.top = randomY + 'px';
+        
+        // Optional: Change text to tease them
+        const teases = ["Catch me! 😜", "Wrong button!", "Try again!", "Too slow!"];
+        const randomTease = teases[Math.floor(Math.random() * teases.length)];
+        noBtn.innerText = randomTease;
+    });
+}
+
+// ==========================================
+// ✨ MAGIC TOUCH HEARTS
+// ==========================================
+document.addEventListener('click', function(e) {
+    // Don't do this if clicking a button
+    if (e.target.tagName === 'BUTTON') return;
+
+    // Create a heart element
+    const heart = document.createElement('div');
+    heart.innerHTML = "💖";
+    heart.style.position = 'fixed';
+    heart.style.left = (e.clientX - 10) + 'px'; // Center on mouse
+    heart.style.top = (e.clientY - 10) + 'px';
+    heart.style.fontSize = '24px';
+    heart.style.pointerEvents = 'none'; // Click through it
+    heart.style.transition = 'all 1s ease';
+    heart.style.zIndex = '9999';
+    
+    document.body.appendChild(heart);
+
+    // Animate it floating up
+    setTimeout(() => {
+        heart.style.transform = "translateY(-50px) scale(1.5)";
+        heart.style.opacity = "0";
+    }, 50);
+
+    // Remove it after 1 second to keep the site clean
+    setTimeout(() => {
+        heart.remove();
+    }, 1000);
+});
